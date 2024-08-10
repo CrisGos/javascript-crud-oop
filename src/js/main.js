@@ -11,7 +11,21 @@ class Persona {
     }
 
 
-    registrarse() {
+    static async registrarse() {
+        const response = await fetch(`http://localhost:3000/users`);
+        const data = await response.json();
+        const newUser = {
+            username: username.value,
+            email: email.value,
+            password: password.value
+        }
+        await fetch("http://localhost:3000/users", {
+            method: 'POST',
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(newUser),
+        })
 
     }
 
@@ -61,7 +75,7 @@ class Display {
                 <input type="password" class="form-control" id="password-reg">
             </div>
 
-            <select class="form-select" aria-label="Default select example">
+            <select class="form-select" id="role" aria-label="Default select example">
                 <option selected>Select a role</option>
                 <option value="true">Admin</option>
                 <option value="false">User</option>
@@ -71,6 +85,19 @@ class Display {
 
             `
         });
+        //extract the input
+        const username = document.getElementById("username")
+        const email = document.getElementById("email")
+        const password = document.getElementById("password")
+        const role = document.getElementById("role")
+
+        if (role.value == true) {
+            admin = new Administrador
+            admin(username.value, email.value, password.value)
+        }
+        
+
+
         
         document.getElementById('register-b').addEventListener('submit', function(event) {
             location.reload();
